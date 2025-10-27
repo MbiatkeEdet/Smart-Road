@@ -1,65 +1,269 @@
-import Image from "next/image";
+// 'use client';
+// import { useState, useEffect } from 'react';
+// import Header from './components/Header';
+// import TrafficMap from './components/TrafficMap';
+// import IncidentList from './components/IncidentList';
+// import ReportModal from './components/ReportModal';
+// import RoutePlanner from './components/RoutePlanner';
+
+// export default function Home() {
+//   const [incidents, setIncidents] = useState([]);
+//   const [showReportModal, setShowReportModal] = useState(false);
+//   const [selectedIncident, setSelectedIncident] = useState(null);
+//   const [currentLocation, setCurrentLocation] = useState(null);
+
+//   // Mock data - in real app, this would come from an API
+//   useEffect(() => {
+//     const mockIncidents = [
+//       {
+//         id: 1,
+//         type: 'accident',
+//         title: 'Accident on Aba Road',
+//         description: 'Multiple vehicle collision near Rumuola Junction',
+//         location: { lat: 4.8242, lng: 7.0336 },
+//         severity: 'high',
+//         timestamp: new Date(),
+//         verified: true
+//       },
+//       {
+//         id: 2,
+//         type: 'road_works',
+//         title: 'Road Works on Ikwerre Road',
+//         description: 'Road construction between GRA and Elekahia',
+//         location: { lat: 4.8156, lng: 7.0498 },
+//         severity: 'medium',
+//         timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
+//         verified: true
+//       },
+//       {
+//         id: 3,
+//         type: 'flooding',
+//         title: 'Flooding at Rumuokoro',
+//         description: 'Heavy flooding after rainfall, avoid area',
+//         location: { lat: 4.8361, lng: 7.0256 },
+//         severity: 'high',
+//         timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000),
+//         verified: false
+//       }
+//     ];
+//     setIncidents(mockIncidents);
+//   }, []);
+
+//   // Get user location
+//   useEffect(() => {
+//     if (navigator.geolocation) {
+//       navigator.geolocation.getCurrentPosition(
+//         (position) => {
+//           setCurrentLocation({
+//             lat: position.coords.latitude,
+//             lng: position.coords.longitude
+//           });
+//         },
+//         (error) => {
+//           console.log('Error getting location:', error);
+//           // Default to Port Harcourt center
+//           setCurrentLocation({ lat: 4.8156, lng: 7.0498 });
+//         }
+//       );
+//     }
+//   }, []);
+
+//   const handleReportSubmit = (report) => {
+//     const newIncident = {
+//       id: incidents.length + 1,
+//       ...report,
+//       timestamp: new Date(),
+//       verified: false
+//     };
+//     setIncidents([newIncident, ...incidents]);
+//     setShowReportModal(false);
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-green-500">
+//       <Header onReportClick={() => setShowReportModal(true)} />
+      
+//       <main className="container mx-auto px-4 py-6">
+//         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+//           {/* Left Column - Map and Route Planner */}
+//           <div className="lg:col-span-2 space-y-6">
+//             <RoutePlanner currentLocation={currentLocation} />
+//             <TrafficMap 
+//               incidents={incidents}
+//               currentLocation={currentLocation}
+//               onIncidentClick={setSelectedIncident}
+//             />
+//           </div>
+          
+//           {/* Right Column - Incident List */}
+//           <div className="lg:col-span-1">
+//             <IncidentList 
+//               incidents={incidents}
+//               selectedIncident={selectedIncident}
+//               onIncidentClick={setSelectedIncident}
+//             />
+//           </div>
+//         </div>
+//       </main>
+
+//       {showReportModal && (
+//         <ReportModal
+//           onClose={() => setShowReportModal(false)}
+//           onSubmit={handleReportSubmit}
+//           currentLocation={currentLocation}
+//         />
+//       )}
+//     </div>
+//   );
+// }
+'use client';
+import { useState, useEffect } from 'react';
+import Header from './components/Header';
+import TrafficMap from './components/TrafficMap';
+import IncidentList from './components/IncidentList';
+import ReportModal from './components/ReportModal';
+import RoutePlanner from './components/RoutePlanner';
+import useProximityAlerts from './hooks/useProximityAlerts';
+import VoiceSettings from './components/VoiceSettings';
 
 export default function Home() {
+  const [incidents, setIncidents] = useState([]);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [selectedIncident, setSelectedIncident] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState(null);
+  const [voiceAlertsEnabled, setVoiceAlertsEnabled] = useState(true);
+
+  // Mock data with location names for voice alerts
+  useEffect(() => {
+    const mockIncidents = [
+      {
+        id: 1,
+        type: 'accident',
+        title: 'Accident on Aba Road',
+        description: 'Multiple vehicle collision near Rumuola Junction',
+        location: { lat: 4.8242, lng: 7.0336 },
+        severity: 'high',
+        timestamp: new Date(),
+        verified: true
+      },
+      {
+        id: 2,
+        type: 'road_works',
+        title: 'Road Works on Ikwerre Road',
+        description: 'Road construction between GRA and Elekahia',
+        location: { lat: 4.8156, lng: 7.0498 },
+        severity: 'medium',
+        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
+        verified: true
+      },
+      {
+        id: 3,
+        type: 'flooding',
+        title: 'Flooding at Igwuruta-Ali Road',
+        description: 'Heavy flooding after rainfall, avoid area',
+        location: { lat: 4.8361, lng: 7.0256 },
+        severity: 'high',
+        timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000),
+        verified: false
+      },
+      {
+        id: 4,
+        type: 'police_checkpoint',
+        title: 'Police Checkpoint at Rumuokoro',
+        description: 'Multiple police checkpoints causing slowdown',
+        location: { lat: 4.8300, lng: 7.0200 },
+        severity: 'medium',
+        timestamp: new Date(Date.now() - 0.5 * 60 * 60 * 1000),
+        verified: true
+      }
+    ];
+    setIncidents(mockIncidents);
+  }, []);
+
+  // Get user location
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setCurrentLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          });
+        },
+        (error) => {
+          console.log('Error getting location:', error);
+          // Default to Port Harcourt center
+          setCurrentLocation({ lat: 4.8156, lng: 7.0498 });
+        }
+      );
+    }
+  }, []);
+
+  // Initialize proximity alerts
+  const { alertedIncidents } = useProximityAlerts(
+    incidents, 
+    currentLocation, 
+    voiceAlertsEnabled
+  );
+
+  const handleReportSubmit = (report) => {
+    const newIncident = {
+      id: incidents.length + 1,
+      ...report,
+      timestamp: new Date(),
+      verified: false
+    };
+    setIncidents([newIncident, ...incidents]);
+    setShowReportModal(false);
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <div className="min-h-screen bg-green-50">
+      <Header onReportClick={() => setShowReportModal(true)} />
+      
+      <main className="container mx-auto px-4 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Left Column - Map and Route Planner */}
+          <div className="lg:col-span-3 space-y-6">
+            <RoutePlanner currentLocation={currentLocation} />
+            <TrafficMap 
+              incidents={incidents}
+              currentLocation={currentLocation}
+              onIncidentClick={setSelectedIncident}
+              alertedIncidents={alertedIncidents}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
+          
+          {/* Right Column - Incident List and Voice Settings */}
+          <div className="lg:col-span-1 space-y-6">
+            <VoiceSettings />
+            <IncidentList 
+              incidents={incidents}
+              selectedIncident={selectedIncident}
+              onIncidentClick={setSelectedIncident}
+              alertedIncidents={alertedIncidents}
+            />
+          </div>
         </div>
       </main>
+
+      {/* Active Alerts Indicator */}
+      {alertedIncidents.size > 0 && (
+        <div className="fixed bottom-4 right-4 bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg animate-pulse">
+          <div className="flex items-center space-x-2">
+            <span>🔊</span>
+            <span>{alertedIncidents.size} Active Alert(s)</span>
+          </div>
+        </div>
+      )}
+
+      {showReportModal && (
+        <ReportModal
+          onClose={() => setShowReportModal(false)}
+          onSubmit={handleReportSubmit}
+          currentLocation={currentLocation}
+        />
+      )}
     </div>
   );
 }
