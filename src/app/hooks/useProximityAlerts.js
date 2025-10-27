@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import voiceService from '../services/voiceService';
+import VoiceService from '../services/VoiceService';
 
 export default function useProximityAlerts(incidents, currentLocation, enabled = true) {
   const [alertedIncidents, setAlertedIncidents] = useState(new Set());
