@@ -101,7 +101,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-green-50">
+    <div className="min-h-screen bg-gray-300">
       <Header onReportClick={() => setShowReportModal(true)} />
       
       <main className="container mx-auto px-4 py-6">

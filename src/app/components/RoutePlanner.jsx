@@ -20,7 +20,7 @@ export default function RoutePlanner({ currentLocation }) {
       
       <form onSubmit={handlePlanRoute} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-blue-700 mb-2">
+          <label className="block text-md font-bold text-blue-700 mb-2">
             Start Location
           </label>
           <input
@@ -28,12 +28,12 @@ export default function RoutePlanner({ currentLocation }) {
             value={route.start}
             onChange={(e) => setRoute(prev => ({...prev, start: e.target.value}))}
             placeholder="Enter starting point"
-            className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-2 border border-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-md font-bold text-blue-700 mb-2">
             Destination
           </label>
           <input
@@ -41,7 +41,7 @@ export default function RoutePlanner({ currentLocation }) {
             value={route.destination}
             onChange={(e) => setRoute(prev => ({...prev, destination: e.target.value}))}
             placeholder="Enter destination"
-            className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-2 border border-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
 
@@ -69,7 +69,7 @@ export default function RoutePlanner({ currentLocation }) {
 
         <button
           type="submit"
-          className="w-full btn-primary"
+          className="p-2 y-2 btn-primary border border-black rounded-lg text-md hover:bg-blue-500"
         >
           Plan Route
         </button>
@@ -78,7 +78,7 @@ export default function RoutePlanner({ currentLocation }) {
           <button
             type="button"
             onClick={() => setRoute(prev => ({...prev, start: 'Current Location'}))}
-            className="w-full btn-secondary text-sm"
+            className="p-2 y-2 border border-black rounded-lg btn-secondary text-md hover:bg-blue-500"
           >
             Use My Current Location
           </button>
