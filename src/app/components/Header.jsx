@@ -38,7 +38,7 @@ export default function Header({ onReportClick }) {
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-3xl font-bold text-blue-500">Smart Road</h1>
-              <p className="text-blue-300 text-md">Port Harcourt Traffic Information</p>
+              <p className="text-blue-300 font-bold text-blue-400">Port Harcourt Traffic Information</p>
             </div>
             
             <div className="flex space-x-4">

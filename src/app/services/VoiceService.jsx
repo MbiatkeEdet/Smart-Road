@@ -110,6 +110,8 @@
 // export default voiceService;
 
 // src/app/services/VoiceService.jsx
+
+"use client"
 import SpeakTTS from 'speak-tts';
 
 class VoiceService {
