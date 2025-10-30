@@ -16,7 +16,7 @@ export default function RoutePlanner({ currentLocation }) {
 
   return (
     <div className="card">
-      <h2 className="text-xl font-semibold mb-4">Plan Your Route</h2>
+      <h2 className="text-xl font-bold uppercase mb-4">Plan Your Route</h2>
       
       <form onSubmit={handlePlanRoute} className="space-y-4">
         <div>
@@ -28,7 +28,7 @@ export default function RoutePlanner({ currentLocation }) {
             value={route.start}
             onChange={(e) => setRoute(prev => ({...prev, start: e.target.value}))}
             placeholder="Enter starting point"
-            className="w-full p-2 border border-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-2 border border-black text-2xl rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
 
@@ -41,7 +41,7 @@ export default function RoutePlanner({ currentLocation }) {
             value={route.destination}
             onChange={(e) => setRoute(prev => ({...prev, destination: e.target.value}))}
             placeholder="Enter destination"
-            className="w-full p-2 border border-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-2 border border-black text-2xl rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
 

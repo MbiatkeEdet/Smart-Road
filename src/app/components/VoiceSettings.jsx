@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect } from 'react';
 // import voiceService from '../../services/VoiceService';
 import voiceService from '../services/VoiceService';
